@@ -18,9 +18,10 @@ with open('Boost1.csv', 'r') as csvfile:
 			obj[data_labels[j]] = data1[i][j]
 		data2.append(obj)
 
-
+	# for loop begin 
 	submitted_test=[]
 	# must be casted in a list
+	# 455 becomes i and data labels become 
 	submitted_test.append( data2[455][data_labels[0]])
 	submitted_test.append( data2[455][data_labels[1]])
 	submitted_test.append( data2[455][data_labels[2]])
