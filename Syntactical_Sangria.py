@@ -56,7 +56,7 @@ with open('Boost1.csv', 'r') as csvfile:
 	texts[3][0] = texts[3][0][2:]
 	texts[3][len(texts[3])-1] = texts[3][len(texts[3])-1][:len(texts[3][len(texts[3])-1])-2]
 	print(texts)
-
+	# this vv should have all the words in the entirety of the data set not just suggestions because if not some of the words that show up in the submitted wont get accounted for, and will give us a "better" statistic but wont give us an accurate statistic
 	dictionary = corpora.Dictionary(texts)
 	# puts the stuff in correct form
 	print(dictionary)
