@@ -21,6 +21,7 @@ with open('Boost1.csv', 'r') as csvfile:
 
 	submitted_test=[]
 	# must be casted in a list
+	submitted_test.append( data2[455][data_labels[0]])
 	submitted_test.append( data2[455][data_labels[1]])
 	submitted_test.append( data2[455][data_labels[2]])
 	submitted_test.append( data2[455][data_labels[3]])
@@ -32,18 +33,8 @@ with open('Boost1.csv', 'r') as csvfile:
 	stoplist = set('for a of the and to in'.split())
 	# set the ads into proper format 
 	texts = [[word for word in text.split() if word not in stoplist]for text in submitted_test]
-	# from collections import defaultdict
-	# frequency = defaultdict(int)
-	# for text in texts:
-	# 	for token in text:
-	# 		frequency[token] += 1
-	# texts = [[token for token in text if frequency[token] > 1]
-	# 		 for text in texts]
-	# from pprint import pprint 
-	# # pprint(texts)
-	# print(texts)
-	# texts[i][len(texts[i])-1] is the last word of the list that we are dealing with 
-
+	
+	# cleaned text
 	texts[0][0] = texts[0][0][2:]
 	texts[0][len(texts[0])-1] = texts[0][len(texts[0])-1][:len(texts[0][len(texts[0])-1])-2]
 	
@@ -55,22 +46,26 @@ with open('Boost1.csv', 'r') as csvfile:
 	
 	texts[3][0] = texts[3][0][2:]
 	texts[3][len(texts[3])-1] = texts[3][len(texts[3])-1][:len(texts[3][len(texts[3])-1])-2]
-	print(texts)
+	# ]print(texts)
 	# this vv should have all the words in the entirety of the data set not just suggestions because if not some of the words that show up in the submitted wont get accounted for, and will give us a "better" statistic but wont give us an accurate statistic
 	dictionary = corpora.Dictionary(texts)
 	# puts the stuff in correct form
-	print(dictionary)
+	# print(dictionary)
 	submission = data2[455][data_labels[0]]
 	
-	submission= submission[2:len(submission)-3]
-	print(submission)
-	new_vec = dictionary.doc2bow(submission.split())
+	submission= submission[2:len(submission)-2]
 	print(submission.split())
+	new_vec = dictionary.doc2bow(submission.split())
+	print(new_vec)
+	# new_vec= [(0,1),(1,1)]
+	# print(submission.split())
 	# print(new_vec)
 	corpus = [dictionary.doc2bow(text) for text in texts]
 	tfidf = models.TfidfModel(corpus)
 	print(corpus)
-	print(tfidf[new_vec])
+	sim_arr=tfidf[new_vec]
+	from functools import reduce
+	final_sim = reduce((lambda sim1,sim2: sim1[1]*sim2[1]),sim_arr)
 
 
 			# print(data_labels[0])
