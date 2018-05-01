@@ -1,8 +1,10 @@
 from gensim import corpora, models, similarities
-import csv
 import numbers
+import csv
 
-import csv 
+totalCount = 0
+hitCount = 0
+
 with open('Boost1.csv', 'r') as csvfile:
 	data_in = csv.reader(csvfile, delimiter = ',',quotechar = '|')
 	data1 = []
@@ -30,6 +32,7 @@ with open('Boost1.csv', 'r') as csvfile:
 			submitted_test.append( data2[i][data_labels[j+2]])
 			submitted_test.append( data2[i][data_labels[j+3]])
 			submitted_test.append( data2[i][data_labels[j+4]])
+
 
 
 	# print(submitted_test)
@@ -63,6 +66,17 @@ with open('Boost1.csv', 'r') as csvfile:
 			if texts[0][0] == "NULL":
 				continue
 
+			##Basic comparison
+			totalCount +=1
+			if texts[0][0] == texts[1][0]:
+				hitCount += 1
+			elif texts[0][0] == texts[2][0]:
+				hitCount += 1
+			elif texts[0][0] == texts[3][0]:
+				hitCount += 1
+			elif texts[0][0] == texts[4][0]:
+				hitCount += 1
+
 			dictionary = corpora.Dictionary(texts)
 			# print(dictionary.token2id)
 			# puts the stuff in correct form
@@ -84,7 +98,7 @@ with open('Boost1.csv', 'r') as csvfile:
 			if sim_arr ==[]:
 				continue
 			from functools import reduce
-			f = lambda a,b: a * b[1] if (isinstance(a,numbers.Number)) else a[1]*b[1]
+			f = lambda a,b: a + b[1] if (isinstance(a,numbers.Number)) else a[1]+b[1]
 			final_sim = reduce(f,sim_arr)
 			if(str(final_sim) == "(0, 1.0)"):
 				final_sim = 1
@@ -92,6 +106,9 @@ with open('Boost1.csv', 'r') as csvfile:
 			x = " ".join(texts2print[0])
 			x = x +","+str(final_sim) + "\n"
 			file.write(x)
+
+percentage = hitCount/totalCount
+file.write("hitCount:"+ str(percentage))
 		# print(data_labels[0])
 # stoplist = set('for a of the and to in'.split())
 # texts = [[word for word in document.lower().split() if word not in stoplist]
