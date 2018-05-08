@@ -1,7 +1,10 @@
 from gensim import corpora, models, similarities
 import numbers
 import csv
+import nltk
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
+sid = SentimentIntensityAnalyzer()
 totalCount = 0
 hitCount = 0
 
@@ -88,6 +91,7 @@ with open('Boost1.csv', 'r') as csvfile:
 			# print(m)
 			# print(dictionary.token2id)
 			new_vec = dictionary.doc2bow(m)
+			print(new_vec)
 			if new_vec ==[]:
 				continue
 			# print(new_vec)
@@ -104,8 +108,18 @@ with open('Boost1.csv', 'r') as csvfile:
 			if(str(final_sim) == "(0, 1.0)"):
 				final_sim = 1
 			# print(" ".join(texts[0]), final_sim)
+			positive_score= sid.polarity_scores(submission)['pos']
+			negative_score = sid.polarity_scores(submission)['neg']
+			neutral_score = sid.polarity_scores(submission)['neu']
+			outcome = ""
+			if(positive_score>negative_score):
+				outcome = "positive"
+			else:
+				outcome = "negative"
+			print(outcome)
+
 			x = " ".join(texts2print[0])
-			x = x +","+str(final_sim) + "\n"
+			x = x +","+str(final_sim)+","+ outcome + "\n"
 			file.write(x)
 
 
